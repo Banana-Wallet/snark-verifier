@@ -33,6 +33,7 @@ use snark_verifier::{
     verifier::{self, SnarkVerifier},
 };
 use std::{fs::File, io::Cursor, rc::Rc};
+use std::time::Instant;
 
 const LIMBS: usize = 3;
 const BITS: usize = 88;
@@ -549,12 +550,12 @@ fn main() {
 
     let params = gen_srs(agg_config.degree);
     let pk = gen_pk(&params, &agg_circuit.inner);
-    let _deployment_code = gen_aggregation_evm_verifier(
-        &params,
-        pk.get_vk(),
-        aggregation::AggregationCircuit::num_instance(),
-        aggregation::AggregationCircuit::accumulator_indices(),
-    );
+    // let _deployment_code = gen_aggregation_evm_verifier(
+    //     &params,
+    //     pk.get_vk(),
+    //     aggregation::AggregationCircuit::num_instance(),
+    //     aggregation::AggregationCircuit::accumulator_indices(),
+    // );
 
     let break_points = agg_circuit.inner.break_points();
     drop(agg_circuit);
@@ -567,12 +568,15 @@ fn main() {
         snarks,
     );
     let instances = agg_circuit.instances();
+    let start_time = Instant::now();
     let _proof = gen_proof::<
         _,
         _,
         EvmTranscript<G1Affine, _, _, _>,
         EvmTranscript<G1Affine, _, _, _>,
     >(&params, &pk, agg_circuit.inner, instances.clone());
+    let elapsed_time = start_time.elapsed();
+    println!("Aggregation time: {:?}", elapsed_time);    
     #[cfg(feature = "revm")]
     evm_verify(_deployment_code, instances, _proof);
 }

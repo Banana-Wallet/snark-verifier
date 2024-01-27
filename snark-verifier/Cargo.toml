@@ -62,10 +62,12 @@ halo2-axiom = ["halo2-base/halo2-axiom", "halo2-ecc?/halo2-axiom"]
 [[example]]
 name = "evm-verifier"
 required-features = ["loader_evm"]
+path = "./examples/em-verifier.rs"
 
 [[example]]
 name = "evm-verifier-with-accumulator"
 required-features = ["loader_halo2", "loader_evm"]
+path = "./examples/evm-verifier-with-accumulator.rs"
 
 [[example]]
 name = "recursion"
