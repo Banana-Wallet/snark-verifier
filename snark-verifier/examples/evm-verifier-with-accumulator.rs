@@ -517,7 +517,7 @@ fn evm_verify(deployment_code: Vec<u8>, instances: Vec<Vec<Fr>>, proof: Vec<u8>)
 fn main() {
     let params_app = gen_srs(8);
 
-    let snarks = [(); 3].map(|_| gen_application_snark(&params_app));
+    let snarks = [(); 2].map(|_| gen_application_snark(&params_app));
 
     let agg_config: AggregationConfigParams = AggregationConfigParams {
         degree: 21,
