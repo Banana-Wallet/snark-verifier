@@ -519,11 +519,17 @@ fn main() {
 
     let snarks = [(); 3].map(|_| gen_application_snark(&params_app));
 
-    let path = "./configs/example_evm_accumulator.json";
-    let agg_config: AggregationConfigParams = serde_json::from_reader(
-        File::open(path).unwrap_or_else(|e| panic!("{path} does not exist: {e:?}")),
-    )
-    .unwrap();
+    let agg_config: AggregationConfigParams = AggregationConfigParams {
+        degree: 21,
+        num_advice: 5,
+        num_lookup_advice: 1,
+        num_fixed: 1,
+        lookup_bits: 20,
+    };
+    // serde_json::from_reader(
+    //     File::open(path).unwrap_or_else(|e| panic!("{path} does not exist: {e:?}")),
+    // )
+    // .unwrap();
     let mut circuit_params = BaseCircuitParams {
         k: agg_config.degree as usize,
         num_advice_per_phase: vec![agg_config.num_advice],
